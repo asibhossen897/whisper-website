@@ -5,4 +5,12 @@ __pycache__/
 src/audio.mp3
 venv/
 data/
-
+*.srt
+*.vtt
+*.mp3
+*.wav
+*.m4a
+*.webm
+*.ogg
+*.flac
+*.aac

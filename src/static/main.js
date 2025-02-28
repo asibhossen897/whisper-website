@@ -3,10 +3,19 @@
 const recorder = document.getElementById('recorder');
 const player = document.getElementById('player');
 
+// Script to set the default subtitle file name based on the uploaded file
+const filenameInput = document.getElementById('filename');
+
 recorder.addEventListener('change', function (e) {
   const file = e.target.files[0];
   const url = URL.createObjectURL(file);
   player.src = url;
+
+  // Set the default subtitle file name
+  if (file) {
+    const fileName = file.name.split('.').slice(0, -1).join('.');
+    filenameInput.value = fileName;
+  }
 });
 /* /script */
 

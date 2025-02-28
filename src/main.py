@@ -114,23 +114,26 @@ async def download_subtitle(
         translate_to: str = Form('spanish'),
 ):
 
+    # Extract the base name of the uploaded file
+    uploaded_filename = request.headers.get('content-disposition').split('filename=')[1].strip('"')
+    base_name = uploaded_filename.rsplit('.', 1)[0]
+
     with open('audio.mp3', 'wb') as f:
         f.write(file)
     
     model = stable_whisper.load_model(model_type)
     result = model.transcribe("audio.mp3", regroup=False)
 
-    subtitle_file = "subtitle.srt"
+    # Use the base name of the uploaded file for the subtitle file
+    subtitle_file = f"{base_name}.{file_type}"
 
     if file_type == "srt":
-        subtitle_file = f"{filename}.srt"
         with open(subtitle_file, "w") as f:
             if timestamps:
                 f.write(make_srt_subtitles(result.segments, translate_to, max_characters))
             else:
                 f.write(result.text)
     elif file_type == "vtt":
-        subtitle_file = f"{filename}.vtt"
         with open(subtitle_file, "w") as f:
             if timestamps:
                 f.write(result.to_vtt())
